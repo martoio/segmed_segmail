@@ -1,4 +1,6 @@
 const path = require("path");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -9,7 +11,7 @@ module.exports = {
     libraryTarget: "umd"
   },
   resolve: {
-    extensions: [".ts", ".tsx"]
+    extensions: [".ts", ".tsx", ".js"]
   },
   module: {
     rules: [
@@ -17,19 +19,18 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         use: [
           {
-            loader: require.resolve("babel-loader")
+            loader: require.resolve("babel-loader"),
+            options: {
+                presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
+              }
           }
         ]
       },
-      {
-        test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"],
-        include: path.resolve(__dirname, "./src")
-      }
     ]
   },
-  externals: {
-    react: "react",
-    "react-dom": "react-dom"
-  }
+  plugins: [
+    new HtmlWebPackPlugin({
+        template: "./public/index.html"
+    })
+  ]
 };
