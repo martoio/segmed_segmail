@@ -15,7 +15,6 @@ export default function App() {
     <Wrapper className="App">
       <FilterPane />
       <RecordList />
-      <PreviewPane />
     </Wrapper>
   );
 }
