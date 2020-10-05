@@ -2,34 +2,33 @@ import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
 import { RecordListWrapper } from './styles';
+import Record from '../../models/record';
 
 export interface RecordListProps {
-
+    records: Array<Record>
 }
+
+const DEFAULT_BODY_LENGTH = 140;
 
 export const RecordList: React.FC<RecordListProps> = (props: RecordListProps) => {
     return (
         <RecordListWrapper>
-            Records
             <Table>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Excerpt</th>
+                        <th>Body</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto text goes here</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton text goes here</td>
-                    </tr>
+                    {props.records.map(record => (
+                        <tr key={record.id}>
+                            <td>{record.id}</td>
+                            <td>{record.title}</td>
+                            <td>{record.body.substring(0, DEFAULT_BODY_LENGTH)}...</td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </RecordListWrapper>
