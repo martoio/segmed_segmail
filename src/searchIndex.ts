@@ -17,3 +17,10 @@ export const generateIndex = (records: Array<Record>) => {
     populateIndex(records);
     return IndexBuilder.build();
 };
+
+export const generateLuceneNOTqueryFormat = (terms: string) => {
+    if(terms.length === 0) {
+        return '';
+    }
+    return terms.trim().split(' ').map(word => `-${word}`).join(' ');
+};
