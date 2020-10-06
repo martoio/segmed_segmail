@@ -86,9 +86,13 @@ class App extends React.Component<AppProps, AppState> {
         if(!record) {
             return;
         }
+        this.setURLToRecord(record)
+        this.setState({shouldShowPreview: true, recordSelected: record});
+    }
+
+    setURLToRecord = (record: Record) => {
         history.push(`/record/${record.id}`);
         document.title = record.title;
-        this.setState({shouldShowPreview: true, recordSelected: record});
     }
 
     onClickHome = () => {
@@ -133,10 +137,46 @@ class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    goToNextRecord = () => {
+        const records = this.getFilteredRecords();
+        const currentIndex = records.indexOf(this.state.recordSelected!);
+
+        if(currentIndex === -1) {
+            return;
+        }
+
+        const nextIndex = (currentIndex + 1) % records.length;
+
+        this.setURLToRecord(records[nextIndex]);
+        this.setState({
+            recordSelected: records[nextIndex],
+        });
+    }
+
+    goToPreviousRecord = () => {
+        const records = this.getFilteredRecords();
+        const currentIndex = records.indexOf(this.state.recordSelected!);
+
+        if(currentIndex === -1) {
+            return;
+        }
+
+        const nextIndex = currentIndex === 0 ? records.length - 1 : (currentIndex - 1) % records.length;
+
+        this.setURLToRecord(records[nextIndex]);
+        this.setState({
+            recordSelected: records[nextIndex],
+        });
+    }
+
     render() {
         return (
             <>
-                <Header onClickHome={this.onClickHome} />
+                <Header
+                    onClickHome={this.onClickHome}
+                    goToNextRecord={this.goToNextRecord}
+                    goToPreviousRecord={this.goToPreviousRecord}
+                />
                 <Wrapper className="App">
 
                     {this.state.shouldShowPreview && this.state.recordSelected ?
