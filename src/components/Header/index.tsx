@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                <Nav.Link href="/" onClick={props.onClickHome}>Home</Nav.Link>
+                <Nav.Link onClick={props.onClickHome}>Home</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

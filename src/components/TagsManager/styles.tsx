@@ -1,5 +1,5 @@
 import styled from 'styled-components';
 
-export const FilterPaneWrapper = styled.div`
+export const TagsManagerWrapper = styled.div`
     padding: 8px;
 `;

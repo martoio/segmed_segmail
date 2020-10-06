@@ -8,7 +8,11 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: "[name].js",
     library: "segmed_segmail",
-    libraryTarget: "umd"
+    libraryTarget: "umd",
+    publicPath: '/'
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"]

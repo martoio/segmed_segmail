@@ -2,7 +2,7 @@ import * as React from 'react';
 import {shallow, configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import {updateNegateFilter, updateSearchFilter} from './';
+import {updateNegateFilter, updateSearchFilter, stripLuceneNOTFormat} from './';
 
 configure({ adapter: new Adapter() });
 
@@ -51,7 +51,25 @@ describe('FilterPane', () => {
             expect(mockOnSearchUpdate).toHaveBeenCalledTimes(1);
             expect(mockOnSearchUpdate).toHaveBeenCalledWith('words to include');
         });
+    });
+
+    describe('#stripLuceneNOTFormat', () => {
+        it('should convert a Lucene NOT query to a human-readable for', () => {
+            const luceneNOTQuery = '-this -is -a -not -query';
+
+            const humanReadable = stripLuceneNOTFormat(luceneNOTQuery);
+
+            expect(humanReadable).toEqual('this is a not query');
+        });
+
+        it('should return an empty string on an empty string input', () => {
+            const emptyQuery = '';
+            const humanReadable = stripLuceneNOTFormat(emptyQuery);
+
+            expect(humanReadable).toBe('');
+        });
     })
+
 
 
 });
