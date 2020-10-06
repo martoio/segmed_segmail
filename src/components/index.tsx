@@ -14,17 +14,8 @@ const Wrapper = styled.main`
     flex-direction: row;
 `;
 
-const records: Array<Record> = [
-    new Record(1, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-    new Record(2, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-    new Record(3, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-    new Record(4, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-    new Record(5, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-    new Record(6, 'Medical journal', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, itaque dolor dolorem quisquam esse eveniet provident, asperiores accusantium tempora sunt eligendi recusandae voluptate sapiente impedit fugiat! Reprehenderit libero quae animi.'),
-];
-
 interface AppProps {
-
+    records: Array<Record>
 }
 
 interface AppState {
@@ -42,7 +33,7 @@ class App extends React.Component<AppProps, AppState> {
         this.state = {
             shouldShowPreview: false,
             recordSelected: null,
-            records
+            records: props.records,
         };
 
         this.historyListenerUnbind = history.listen(({ location, action }) => {
@@ -89,7 +80,7 @@ class App extends React.Component<AppProps, AppState> {
                     {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
                         <>
                             <FilterPane />
-                            <RecordList records={records} onRecordClick={this.onRecordClick} />
+                            <RecordList records={this.state.records} onRecordClick={this.onRecordClick} />
                         </>
                     )}
                 </Wrapper>

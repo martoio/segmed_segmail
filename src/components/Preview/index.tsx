@@ -10,7 +10,10 @@ export interface PreviewPaneProps {
 export const PreviewPane: React.FC<PreviewPaneProps> = (props: PreviewPaneProps) => {
     return (
         <PreviewPaneWrapper>
-            {props.record.body}
+            <h1>{props.record.title}</h1>
+            <div>
+                {props.record.body}
+            </div>
         </PreviewPaneWrapper>
     );
 };

@@ -8,7 +8,8 @@
     "lint": "eslint",
     "start:dev": "webpack-dev-server --mode development --open",
     "tdd": "jest --watch",
-    "test": "jest"
+    "test": "jest",
+    "prestart:dev": "node ./util/preBuildCheck.js"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "eslint-plugin-react": "^7.21.3",
     "html-webpack-plugin": "^4.5.0",
     "jest": "^26.4.2",
+    "newsapi": "^2.4.1",
     "ts-jest": "^26.4.1",
     "typescript": "^4.0.3",
     "webpack": "^4.44.2",
@@ -52,6 +54,7 @@
   },
   "dependencies": {
     "@types/jest": "^26.0.14",
+    "dotenv": "^8.2.0",
     "history": "^5.0.0",
     "lunr": "^2.3.9",
     "react": "^16.13.1",
