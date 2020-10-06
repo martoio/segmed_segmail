@@ -7,6 +7,7 @@ import { RecordList } from './RecordList';
 import { PreviewPane } from './Preview';
 import Record from "../models/record";
 import { Action } from "history";
+import { Header } from "./Header";
 
 const Wrapper = styled.main`
     display: flex;
@@ -65,7 +66,6 @@ class App extends React.Component<AppProps, AppState> {
     }
 
     onRecordClick = (recordId: number) => {
-        console.log(recordId);
         const record = this.state.records.find(el => el.id === recordId);
         if(!record) {
             return;
@@ -75,16 +75,25 @@ class App extends React.Component<AppProps, AppState> {
         this.setState({shouldShowPreview: true, recordSelected: record});
     }
 
+    onClickHome = () => {
+        history.push('/');
+        this.onBrowserBack();
+    }
+
     render() {
         return (
-            <Wrapper className="App">
-                {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
-                    <>
-                        <FilterPane />
-                        <RecordList records={records} onRecordClick={this.onRecordClick} />
-                    </>
-                )}
-            </Wrapper>
+            <>
+                <Header onClickHome={this.onClickHome} />
+                <Wrapper className="App">
+
+                    {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
+                        <>
+                            <FilterPane />
+                            <RecordList records={records} onRecordClick={this.onRecordClick} />
+                        </>
+                    )}
+                </Wrapper>
+            </>
           );
     }
 }
