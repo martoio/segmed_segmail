@@ -10,23 +10,6 @@ export interface FilterPaneProps {
     onSearchUpdate: (terms: string) => void;
 }
 
-export const updateNegateFilter = (value: string, onNegateUpdate: (terms: string) => void): void => {
-    if(value.length === 0) {
-        onNegateUpdate('');
-        return;
-    }
-    const words = value.trim().split(' ').map(word => `-${word}`).join(' ');
-    onNegateUpdate(words);
-};
-
-export const updateSearchFilter = (value: string, onSearchUpdate: (terms: string) => void) => {
-    const words = value.trim();
-    onSearchUpdate(words);
-};
-
-export const stripLuceneNOTFormat = (terms: string) => {
-    return terms.split(' ').map(word => word.substring(1)).join(' ');
-};
 
 export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) => {
     return (
@@ -37,9 +20,7 @@ export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) =>
                     <Form.Control
                         placeholder="nobel prize"
                         value={props.searchTerms}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            updateSearchFilter(e.currentTarget.value, props.onSearchUpdate);
-                        }} />
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => props.onSearchUpdate(e.currentTarget.value.trim())} />
                     <Form.Text>
                         Space separated list of words to search for.
                     </Form.Text>
@@ -48,9 +29,7 @@ export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) =>
                     <Form.Control
                         placeholder="journal medicine"
                         value={props.excludedTerms}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            updateSearchFilter(e.currentTarget.value, props.onNegateUpdate);
-                        }}></Form.Control>
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => props.onNegateUpdate(e.currentTarget.value)}></Form.Control>
                     <Form.Text>
                         Space separated list of words to exclude.
                     </Form.Text>

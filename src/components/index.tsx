@@ -8,7 +8,7 @@ import { PreviewPane } from './Preview';
 import Record from "../models/record";
 import { Action } from "history";
 import { Header } from "./Header";
-import { generateIndex } from '../searchIndex';
+import { generateIndex, generateLuceneNOTqueryFormat } from '../searchIndex';
 import Tag from "../models/tag";
 import { TagsManager } from "./TagsManager";
 const Wrapper = styled.main`
@@ -114,7 +114,8 @@ class App extends React.Component<AppProps, AppState> {
 
     search = () => {
         const blankFilterSet: Set<number> = new Set();
-        const searchQuery = `${this.state.includedSearchTerms} ${this.state.excludedSearchTerms}`;
+        const NOTquery = generateLuceneNOTqueryFormat(this.state.excludedSearchTerms);
+        const searchQuery = `${this.state.includedSearchTerms} ${NOTquery}`;
 
         const results = this.state.searchIndex.search(searchQuery);
 
