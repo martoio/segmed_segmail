@@ -9,6 +9,8 @@ import Record from "../models/record";
 import { Action } from "history";
 import { Header } from "./Header";
 import { generateIndex } from '../searchIndex';
+import Tag from "../models/tag";
+import { TagsManager } from "./TagsManager";
 const Wrapper = styled.main`
     display: flex;
     flex-direction: row;
@@ -26,6 +28,8 @@ interface AppState {
     searchIndex: lunr.Index;
     excludedSearchTerms: string;
     includedSearchTerms: string;
+    allTags: Array<Tag>;
+    nextTagId: number;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -43,14 +47,21 @@ class App extends React.Component<AppProps, AppState> {
             searchIndex,
             excludedSearchTerms: '',
             includedSearchTerms: '',
+            allTags: [],
+            nextTagId: 0,
         };
 
         this.historyListenerUnbind = history.listen(({ location, action }) => {
-            console.log(action, location.pathname, location.state);
             if(action === Action.Pop) {
                 this.onBrowserBack();
             }
         });
+    }
+
+    resetBrowserURL = () => {
+        if(window.location.pathname.includes('/record/')) {
+            this.onClickHome();
+        }
     }
 
     componentWillUnmount = () => {
@@ -58,6 +69,7 @@ class App extends React.Component<AppProps, AppState> {
     };
 
     componentDidMount = () => {
+        this.resetBrowserURL();
         this.search();
     }
 
@@ -91,7 +103,6 @@ class App extends React.Component<AppProps, AppState> {
     };
 
     onNegateUpdate = (terms: string) => {
-        console.log(terms);
         this.setState({
             excludedSearchTerms: terms,
         }, this.search);
@@ -100,7 +111,7 @@ class App extends React.Component<AppProps, AppState> {
     search = () => {
         const blankFilterSet: Set<number> = new Set();
         const searchQuery = `${this.state.includedSearchTerms} ${this.state.excludedSearchTerms}`;
-        console.log(searchQuery);
+
         const results = this.state.searchIndex.search(searchQuery);
 
         results.forEach(res => blankFilterSet.add(parseInt(res.ref)));
@@ -113,18 +124,30 @@ class App extends React.Component<AppProps, AppState> {
         return this.state.records.filter((record) => this.state.filterSet.has(record.id));
     }
 
+    addTag = (tagText: string) => {
+        const newTag = new Tag(this.state.nextTagId, tagText);
+
+        this.setState({
+            allTags: [...this.state.allTags, newTag],
+            nextTagId: this.state.nextTagId + 1,
+        });
+    }
+
     render() {
-        console.log(this.state.filterSet);
         return (
             <>
                 <Header onClickHome={this.onClickHome} />
                 <Wrapper className="App">
 
                     {this.state.shouldShowPreview && this.state.recordSelected ?
-                        (<PreviewPane record={this.state.recordSelected}/>) :
+                        (<PreviewPane record={this.state.recordSelected} allTags={this.state.allTags}/>) :
                         (
                             <>
-                                <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
+                                <div>
+                                    <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
+                                    <hr />
+                                    <TagsManager allTags={this.state.allTags} handleCreateTag={this.addTag}/>
+                                </div>
                                 <RecordList records={this.getFilteredRecords()} onRecordClick={this.onRecordClick} />
                             </>
                         )}
