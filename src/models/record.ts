@@ -13,12 +13,12 @@ export class Record {
         this.tags = [];
     }
 
-    addTag(tag: Tag) {
-        this.tags.push(tag);
+    public addTag(tag: Tag) {
+        this.tags = [...this.tags, tag];
     }
 
-    removeTag(tag: Tag) {
-        this.tags = this.tags.filter(existingTag => existingTag === tag);
+    public removeTag(tag: Tag) {
+        this.tags =this.tags.filter(existingTag => existingTag !== tag);
     }
 }
 
