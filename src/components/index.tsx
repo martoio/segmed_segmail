@@ -57,6 +57,10 @@ class App extends React.Component<AppProps, AppState> {
         this.historyListenerUnbind();
     };
 
+    componentDidMount = () => {
+        this.search();
+    }
+
     onBrowserBack = () => {
         document.title = 'SegMail';
         this.setState({
@@ -105,6 +109,10 @@ class App extends React.Component<AppProps, AppState> {
         })
     };
 
+    getFilteredRecords = () => {
+        return this.state.records.filter((record) => this.state.filterSet.has(record.id));
+    }
+
     render() {
         console.log(this.state.filterSet);
         return (
@@ -115,7 +123,7 @@ class App extends React.Component<AppProps, AppState> {
                     {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
                         <>
                             <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
-                            <RecordList records={this.state.records.filter(rec => this.state.filterSet.has(rec.id))} onRecordClick={this.onRecordClick} />
+                            <RecordList records={this.getFilteredRecords()} onRecordClick={this.onRecordClick} />
                         </>
                     )}
                 </Wrapper>
