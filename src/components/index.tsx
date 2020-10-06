@@ -120,12 +120,14 @@ class App extends React.Component<AppProps, AppState> {
                 <Header onClickHome={this.onClickHome} />
                 <Wrapper className="App">
 
-                    {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
-                        <>
-                            <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
-                            <RecordList records={this.getFilteredRecords()} onRecordClick={this.onRecordClick} />
-                        </>
-                    )}
+                    {this.state.shouldShowPreview && this.state.recordSelected ?
+                        (<PreviewPane record={this.state.recordSelected}/>) :
+                        (
+                            <>
+                                <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
+                                <RecordList records={this.getFilteredRecords()} onRecordClick={this.onRecordClick} />
+                            </>
+                        )}
                 </Wrapper>
             </>
           );
