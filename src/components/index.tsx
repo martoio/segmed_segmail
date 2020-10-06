@@ -8,7 +8,7 @@ import { PreviewPane } from './Preview';
 import Record from "../models/record";
 import { Action } from "history";
 import { Header } from "./Header";
-
+import { generateIndex } from '../searchIndex';
 const Wrapper = styled.main`
     display: flex;
     flex-direction: row;
@@ -22,6 +22,10 @@ interface AppState {
     shouldShowPreview: boolean;
     recordSelected: Record | null;
     records: Array<Record>;
+    filterSet: Set<number>;
+    searchIndex: lunr.Index;
+    excludedSearchTerms: string;
+    includedSearchTerms: string;
 }
 
 class App extends React.Component<AppProps, AppState> {
@@ -29,11 +33,16 @@ class App extends React.Component<AppProps, AppState> {
 
     constructor(props: AppProps) {
         super(props);
+        const searchIndex = generateIndex(props.records);
 
         this.state = {
             shouldShowPreview: false,
             recordSelected: null,
             records: props.records,
+            filterSet: new Set(),
+            searchIndex,
+            excludedSearchTerms: '',
+            includedSearchTerms: '',
         };
 
         this.historyListenerUnbind = history.listen(({ location, action }) => {
@@ -71,7 +80,33 @@ class App extends React.Component<AppProps, AppState> {
         this.onBrowserBack();
     }
 
+    onSearchUpdate = (terms: string) => {
+        this.setState({
+            includedSearchTerms: terms,
+        }, this.search);
+    };
+
+    onNegateUpdate = (terms: string) => {
+        console.log(terms);
+        this.setState({
+            excludedSearchTerms: terms,
+        }, this.search);
+    };
+
+    search = () => {
+        const blankFilterSet: Set<number> = new Set();
+        const searchQuery = `${this.state.includedSearchTerms} ${this.state.excludedSearchTerms}`;
+        console.log(searchQuery);
+        const results = this.state.searchIndex.search(searchQuery);
+
+        results.forEach(res => blankFilterSet.add(parseInt(res.ref)));
+        this.setState({
+            filterSet: blankFilterSet,
+        })
+    };
+
     render() {
+        console.log(this.state.filterSet);
         return (
             <>
                 <Header onClickHome={this.onClickHome} />
@@ -79,8 +114,8 @@ class App extends React.Component<AppProps, AppState> {
 
                     {this.state.shouldShowPreview && this.state.recordSelected ? (<PreviewPane record={this.state.recordSelected}/>) : (
                         <>
-                            <FilterPane />
-                            <RecordList records={this.state.records} onRecordClick={this.onRecordClick} />
+                            <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
+                            <RecordList records={this.state.records.filter(rec => this.state.filterSet.has(rec.id))} onRecordClick={this.onRecordClick} />
                         </>
                     )}
                 </Wrapper>
