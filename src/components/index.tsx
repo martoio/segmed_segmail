@@ -144,7 +144,11 @@ class App extends React.Component<AppProps, AppState> {
                         (
                             <>
                                 <div>
-                                    <FilterPane onNegateUpdate={this.onNegateUpdate} onSearchUpdate={this.onSearchUpdate} />
+                                    <FilterPane
+                                        searchTerms={this.state.includedSearchTerms}
+                                        excludedTerms={this.state.excludedSearchTerms}
+                                        onNegateUpdate={this.onNegateUpdate}
+                                        onSearchUpdate={this.onSearchUpdate} />
                                     <hr />
                                     <TagsManager allTags={this.state.allTags} handleCreateTag={this.addTag}/>
                                 </div>

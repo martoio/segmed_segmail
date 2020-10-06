@@ -4,6 +4,8 @@ import {FilterPaneWrapper} from './styles';
 import { Form } from 'react-bootstrap';
 
 export interface FilterPaneProps {
+    searchTerms: string;
+    excludedTerms: string;
     onNegateUpdate: (terms: string) => void;
     onSearchUpdate: (terms: string) => void;
 }
@@ -22,6 +24,10 @@ export const updateSearchFilter = (value: string, onSearchUpdate: (terms: string
     onSearchUpdate(words);
 };
 
+export const stripLuceneNOTFormat = (terms: string) => {
+    return terms.split(' ').map(word => word.substring(1)).join(' ');
+};
+
 export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) => {
     return (
         <FilterPaneWrapper>
@@ -30,7 +36,8 @@ export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) =>
                 <Form.Group controlId='shouldBooleanQuery'>
                     <Form.Control
                         placeholder="nobel prize"
-                        onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        value={props.searchTerms}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             updateSearchFilter(e.currentTarget.value, props.onSearchUpdate);
                         }} />
                     <Form.Text>
@@ -40,7 +47,8 @@ export const FilterPane: React.FC<FilterPaneProps> = (props: FilterPaneProps) =>
                 <Form.Group controlId='notBooleanQuery'>
                     <Form.Control
                         placeholder="journal medicine"
-                        onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        value={props.excludedTerms}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             updateSearchFilter(e.currentTarget.value, props.onNegateUpdate);
                         }}></Form.Control>
                     <Form.Text>
