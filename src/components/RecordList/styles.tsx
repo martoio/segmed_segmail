@@ -4,7 +4,7 @@ export const RecordListWrapper = styled.div`
     flex: 1;
     margin-left: 16px;
 
-    tr {
+    tbody tr {
         cursor: pointer;
 
         :hover {
