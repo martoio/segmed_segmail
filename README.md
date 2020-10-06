@@ -17,3 +17,16 @@ And add the API key to it:
 NEWS_API_KEY={your API key goes here}
 ```
 From there, you can run the `start:dev` npm command again.
+
+## Project Structure
+This is a React project built with Typescript and packaged with Webpack.
+The main entry point is `src/index.tsx`, which is just used to initialize the `<App>` component.
+The driver component is found in `src/components/index.tsx -> App`. This component stores all of the state for the application and initializes the [Lunr.js](https://lunrjs.com/) index.
+
+`App` conditionally renders either a `Preview` component or the `FilterPane`, `TagManager`, and `RecordList`.
+`RecordList` is a simple table that renders a filtered subset of results returned from the Lunr index.
+`TagManager` is a simple component that encapsulates displaying and creating new tags.
+`FilterPane` has the 2 fields that allow the user to provide search terms for Lunr.
+
+## Why Lunr
+Since this is meant to emulate a search application, the logical approach would be to incorporate a search engine/information retrieval engine. The most popular open source solutions are Lucene, Elasticsearch and Solr, but those all act as external DBs. In this case, we use a lightweight Lucene clone written in JS. This provides us with a query syntax familiar to users of Lucene and provides us with a functioning inverted-index for searching without having to roll our own.
