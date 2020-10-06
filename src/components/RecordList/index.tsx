@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Table } from 'react-bootstrap';
 
-import { RecordListWrapper } from './styles';
 import Record from '../../models/record';
+import RecordRow from '../RecordRow';
+import { RecordListWrapper } from './styles';
 
 export interface RecordListProps {
-    records: Array<Record>
+    records: Array<Record>;
+    onRecordClick: (id: number) => void;
 }
-
-const DEFAULT_BODY_LENGTH = 140;
 
 export const RecordList: React.FC<RecordListProps> = (props: RecordListProps) => {
     return (
@@ -22,13 +22,7 @@ export const RecordList: React.FC<RecordListProps> = (props: RecordListProps) =>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.records.map(record => (
-                        <tr key={record.id}>
-                            <td>{record.id}</td>
-                            <td>{record.title}</td>
-                            <td>{record.body.substring(0, DEFAULT_BODY_LENGTH)}...</td>
-                        </tr>
-                    ))}
+                    {props.records.map(record => <RecordRow key={record.id} record={record} onClick={() => props.onRecordClick(record.id)}/>)}
                 </tbody>
             </Table>
         </RecordListWrapper>

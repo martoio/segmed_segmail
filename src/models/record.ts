@@ -10,6 +10,7 @@ export class Record {
         this.id = id;
         this.title = title;
         this.body = body;
+        this.tags = [];
     }
 
     addTag(tag: Tag) {

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecordRow component should render correctly 1`] = `
+<tr
+  onClick={[Function]}
+>
+  <td>
+    1
+  </td>
+  <td>
+    dummy
+  </td>
+  <td>
+    test
+    ...
+  </td>
+</tr>
+`;
